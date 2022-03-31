@@ -1,7 +1,8 @@
 import RPi.GPIO as GPIO
 import time
 from picamera import PiCamera
-def trapdoor():
+#the command changedutycycle moves the servo
+def servo():
         servoPIN = 27
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(servoPIN, GPIO.OUT)
@@ -15,6 +16,7 @@ def trapdoor():
         time.sleep(.5)
         p.ChangeDutyCycle(2.5)
         GPIO.cleanup()
+#this measures didtance
 def pro():
 
         try:
@@ -42,6 +44,7 @@ GPIO.output(PIN_TRIGGER, GPIO.HIGH)
         finally:
                 GPIO.cleanup()
 distance=pro()
+#this checks distance and moves the servo
 def pro2():
         secure=True
         while secure==True:
