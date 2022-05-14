@@ -2,12 +2,12 @@ import RPi.GPIO as GPIO
 import time
 from picamera import PiCamera
 #the command changedutycycle moves the servo
-def servo():
+def trapdoor():
         servoPIN = 27
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(servoPIN, GPIO.OUT)
 
-
+        #this is the actual servo moving
         p = GPIO.PWM(servoPIN, 50) # GPIO 17 for PWM with 50Hz
         p.start(2.5) # Initialization
         p.ChangeDutyCycle(2.5)
@@ -16,7 +16,7 @@ def servo():
         time.sleep(.5)
         p.ChangeDutyCycle(2.5)
         GPIO.cleanup()
-#this measures didtance
+#this measures distance
 def pro():
 
         try:
@@ -28,7 +28,7 @@ def pro():
                 GPIO.setup(PIN_ECHO, GPIO.IN)
                 GPIO.output(PIN_TRIGGER, GPIO.LOW)
                 time.sleep(.1)
-GPIO.output(PIN_TRIGGER, GPIO.HIGH)
+                GPIO.output(PIN_TRIGGER, GPIO.HIGH)
                 time.sleep(0.00001)
 
                 GPIO.output(PIN_TRIGGER, GPIO.LOW)
@@ -38,6 +38,7 @@ GPIO.output(PIN_TRIGGER, GPIO.HIGH)
                 while GPIO.input(PIN_ECHO)==1:
                         pulse_end_time = time.time()
                 pulse_duration = pulse_end_time - pulse_start_time
+                #this calculates distance
                 distance = round(pulse_duration * 17150, 2)
                 print "Distance:",distance,"cm"
                 return distance
@@ -49,7 +50,7 @@ def pro2():
         secure=True
         while secure==True:
                 newDist=pro()
-            if(newDist>distance+1)or(newDist<distance-1):
+            if(newDist>distance+10)or(newDist<distance-10):
 
                         secure=False
                         print "oh no"
@@ -60,5 +61,3 @@ def pro2():
 secure=pro2()
 if secure==False:
         trapdoor()
-else:
-        print "no"
